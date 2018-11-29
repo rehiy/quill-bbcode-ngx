@@ -6,13 +6,9 @@
         "email": "mail@anrip.com",
         "url": "http://www.anrip.com"
     },
-    "description": "An angular (>= v5) component for the easy use of the QuillJS richt text editor.",
     "homepage": "http://www.anrip.com",
+    "description": "An angular (>= v5) component for the easy use of the QuillJS richt text editor.",
     "license": "Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/anrip/ngx-quill-bbcode.git"
-    },
     "keywords": [
         "editor",
         "rich text",
@@ -27,6 +23,13 @@
         "directive",
         "component"
     ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/anrip/ngx-quill-bbcode.git"
+    },
+    "bugs": {
+        "url": "https://github.com/anrip/ngx-quill-bbcode/issues"
+    },
     "scripts": {
         "build": "ng-packagr -p ng-package.json",
         "lint": "tslint --force \"src/**/*.ts\"",
@@ -36,7 +39,7 @@
     "module": "./src/quill.module.js",
     "typings": "index.d.ts",
     "dependencies": {
-        "discuz-bbcode": "^0.2.4"
+        "discuz-bbcode": "^0.2.5"
     },
     "devDependencies": {
         "@angular/common": "^5.0.0 || ^6.0.0 || ^7.0.0",

@@ -10,7 +10,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator } fro
 
 import { CustomOption, QuillConfig, QuillModules } from './quill-editor.interfaces';
 
-import * as bbcode from 'discuz-bbcode/lib/bbcode';
+import * as bbcode from 'discuz-bbcode';
 
 // Because quill uses `document` directly, we cannot `import` during SSR
 // instead, we load dynamically via `require('quill')` in `ngAfterViewInit()`
