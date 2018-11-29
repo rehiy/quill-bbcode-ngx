@@ -33,6 +33,7 @@
     "scripts": {
         "build": "ng-packagr -p ng-package.json",
         "lint": "tslint --force \"src/**/*.ts\"",
+        "publish": "cd dist && npm publish",
         "start": "npm run lint"
     },
     "main": "./bundles/index.js",
