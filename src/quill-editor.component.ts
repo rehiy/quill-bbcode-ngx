@@ -35,33 +35,39 @@ let Quill: any;
     ],
     encapsulation: ViewEncapsulation.None
 })
-export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy, Validator {
+export class QuillEditorComponent
+    implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy, Validator {
 
     private disabled = false; // used to store initial value before ViewInit
 
-    public quillEditor: any;
-    public editorElem: HTMLElement;
-    public emptyArray: any[] = [];
-    public content: any;
-    public selectionChangeEvent: any;
-    public textChangeEvent: any;
-    public defaultModules: QuillModules | {};
+    private defaultModules: QuillModules | {};
+    private quillEditor: any;
+    private editorElem: HTMLElement;
+    private content: any;
 
+    private selectionChangeEvent: any;
+    private textChangeEvent: any;
+    private onModelChange: Function = () => { };
+    private onModelTouched: Function = () => { };
+
+    @Input() public locate: '' | 'chinese' = '';
     @Input() public format: 'object' | 'bbcode' | 'html' | 'text' | 'json' = 'html';
-    @Input() public theme: string;
-    @Input() public modules: { [index: string]: Object };
-    @Input() public readOnly = false;
-    @Input() public placeholder: string;
-    @Input() public maxLength: number;
-    @Input() public minLength: number;
-    @Input() public required: boolean;
-    @Input() public formats: string[];
+    @Input() public customOptions: CustomOption[] = [];
     @Input() public sanitize = false;
     @Input() public style: any = {};
-    @Input() public strict = true;
-    @Input() public scrollingContainer: HTMLElement | string;
+
+    @Input() public required: boolean;
+    @Input() public minLength: number;
+    @Input() public maxLength: number;
+
     @Input() public bounds: HTMLElement | string;
-    @Input() public customOptions: CustomOption[] = [];
+    @Input() public formats: string[];
+    @Input() public modules: { [index: string]: Object };
+    @Input() public placeholder: string;
+    @Input() public readOnly = false;
+    @Input() public scrollingContainer: HTMLElement | string;
+    @Input() public strict = true;
+    @Input() public theme: string;
 
     @Input()
     public valueGetter = (quillEditor: any, editorElement: HTMLElement): any => {
@@ -130,9 +136,6 @@ export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor
     @Output()
     public selectionChanged: EventEmitter<any> = new EventEmitter();
 
-    public onModelChange: Function = () => { };
-    public onModelTouched: Function = () => { };
-
     constructor(
         private elementRef: ElementRef,
         private domSanitizer: DomSanitizer,
@@ -150,12 +153,18 @@ export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor
             return;
         }
 
-        if (!Quill) {
-            Quill = require('quill');
+        if (typeof Quill === 'undefined') {
+            switch (this.locate) {
+                case 'chinese':
+                    Quill = require('quill-chinese');
+                    this.defaultModules['toolbar'] = Quill.chineseToolbar;
+                    break;
+                default:
+                    Quill = require('quill');
+            }
         }
 
         const modules = this.modules || this.defaultModules;
-
         const toolbarElem = this.elementRef.nativeElement.querySelector(
             '[quill-editor-toolbar]'
         );
@@ -188,14 +197,14 @@ export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor
         });
 
         this.quillEditor = new Quill(this.editorElem, {
-            modules: modules,
-            readOnly: this.readOnly,
-            placeholder: placeholder,
-            theme: this.theme || 'snow',
-            formats: this.formats,
             bounds: this.bounds ? (this.bounds === 'self' ? this.editorElem : this.bounds) : this.doc.body,
+            formats: this.formats,
+            modules: modules,
+            placeholder: placeholder,
+            readOnly: this.readOnly,
             strict: this.strict,
-            scrollingContainer: this.scrollingContainer
+            scrollingContainer: this.scrollingContainer,
+            theme: this.theme || 'snow'
         });
 
         if (this.content) {
@@ -225,46 +234,51 @@ export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor
         this.editorCreated.emit(this.quillEditor);
 
         // mark model as touched if editor lost focus
-        this.selectionChangeEvent = this.quillEditor.on('selection-change', (range: any, oldRange: any, source: string) => {
-            this.zone.run(() => {
-                this.selectionChanged.emit({
-                    editor: this.quillEditor,
-                    range: range,
-                    oldRange: oldRange,
-                    source: source
-                });
+        this.selectionChangeEvent = this.quillEditor.on(
+            'selection-change',
+            (range: any, oldRange: any, source: string) => {
+                this.zone.run(() => {
+                    this.selectionChanged.emit({
+                        editor: this.quillEditor,
+                        range: range,
+                        oldRange: oldRange,
+                        source: source
+                    });
 
-                if (!range) {
-                    this.onModelTouched();
-                }
-            });
-        });
+                    if (!range) {
+                        this.onModelTouched();
+                    }
+                });
+            }
+        );
 
         // update model if text changes
-        this.textChangeEvent = this.quillEditor.on('text-change', (delta: any, oldDelta: any, source: string) => {
-            const text = this.quillEditor.getText();
-            const content = this.quillEditor.getContents();
+        this.textChangeEvent = this.quillEditor.on(
+            'text-change',
+            (delta: any, oldDelta: any, source: string) => {
+                const text = this.quillEditor.getText();
+                const content = this.quillEditor.getContents();
 
-            let html: string | null = this.editorElem.children[0].innerHTML;
-            if (html === '<p><br></p>' || html === '<div><br><div>') {
-                html = null;
-            }
+                let html: string | null = this.editorElem.children[0].innerHTML;
+                if (html === '<p><br></p>' || html === '<div><br><div>') {
+                    html = null;
+                }
 
-            this.zone.run(() => {
-                this.onModelChange(
-                    this.valueGetter(this.quillEditor, this.editorElem)
-                );
-                this.contentChanged.emit({
-                    editor: this.quillEditor,
-                    html: html,
-                    text: text,
-                    content: content,
-                    delta: delta,
-                    oldDelta: oldDelta,
-                    source: source
+                this.zone.run(() => {
+                    this.onModelChange(
+                        this.valueGetter(this.quillEditor, this.editorElem)
+                    );
+                    this.contentChanged.emit({
+                        editor: this.quillEditor,
+                        html: html,
+                        text: text,
+                        content: content,
+                        delta: delta,
+                        oldDelta: oldDelta,
+                        source: source
+                    });
                 });
-            });
-        }
+            }
         );
     }
 
@@ -285,8 +299,7 @@ export class QuillEditorComponent implements AfterViewInit, ControlValueAccessor
             this.quillEditor.enable(!changes['readOnly'].currentValue);
         }
         if (changes['placeholder']) {
-            this.quillEditor.root.dataset.placeholder =
-                changes['placeholder'].currentValue;
+            this.quillEditor.root.dataset.placeholder = changes['placeholder'].currentValue;
         }
     }
 
