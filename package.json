@@ -1,0 +1,69 @@
+{
+    "name": "ngx-quill-bbcode",
+    "version": "1.0.0",
+    "author": {
+        "name": "Anrip Wong",
+        "email": "mail@anrip.com",
+        "url": "http://www.anrip.com"
+    },
+    "description": "An angular (>= v5) component for the easy use of the QuillJS richt text editor.",
+    "homepage": "http://www.anrip.com",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/anrip/ngx-quill-bbcode.git"
+    },
+    "keywords": [
+        "editor",
+        "rich text",
+        "text editor",
+        "wysiwyg",
+        "quill",
+        "quilljs",
+        "angular",
+        "angular 5",
+        "angular 6",
+        "angular 7",
+        "directive",
+        "component"
+    ],
+    "scripts": {
+        "build": "ng-packagr -p ng-package.json",
+        "lint": "tslint --force \"src/**/*.ts\"",
+        "start": "npm run lint"
+    },
+    "main": "./bundles/index.js",
+    "module": "./src/quill.module.js",
+    "typings": "index.d.ts",
+    "dependencies": {
+        "discuz-bbcode": "^0.2.4"
+    },
+    "devDependencies": {
+        "@angular/common": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/compiler": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/compiler-cli": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/core": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/forms": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/platform-browser": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/platform-browser-dynamic": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@types/node": "^10.12.0",
+        "@types/quill": "^1.3.10",
+        "codelyzer": "^4.5.0",
+        "core-js": "^2.5.7",
+        "ng-packagr": "^4.4.0",
+        "quill": "^1.3.6",
+        "rxjs": "^5.5.2 || ^6.1.0 || ^6.3.0",
+        "ts-helpers": "^1.1.2",
+        "ts-loader": "^5.2.2",
+        "tsickle": "^0.33.1",
+        "tslint": "^4.0.0 || ^5.10.0",
+        "typescript": ">=2.4.2 || <2.8 || ^3.1",
+        "zone.js": "^0.8.26"
+    },
+    "peerDependencies": {
+        "@angular/core": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/forms": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "quill": "^1.3.6",
+        "rxjs": "^5.5.2 || ^6.1.0 || ^6.3.0"
+    }
+}
