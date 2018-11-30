@@ -8,7 +8,7 @@ import {
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator } from '@angular/forms';
 
-import { QuillConfig } from './quill-editor.interfaces';
+import { QuillConfig, QuillModules } from './quill-editor.interfaces';
 
 import * as bbcode from 'discuz-bbcode';
 
@@ -146,28 +146,26 @@ export class QuillEditorComponent
             switch (this.config.language) {
                 case 'chinese':
                     Quill = require('quill-chinese');
-                    if (Quill.chineseToolbar) {
-                        this.config.modules['toolbar'] = Quill.chineseToolbar;
-                    }
+                    this.config.modules.toolbar = Quill.chineseToolbar;
                     break;
                 default:
                     Quill = require('quill');
             }
-            if (this.config.customOptions) {
-                this.config.customOptions.forEach(customOption => {
-                    const newCustomOption = Quill.import(customOption.import);
-                    newCustomOption.whitelist = customOption.whitelist;
-                    Quill.register(newCustomOption, true);
+            if (this.config.customs) {
+                this.config.customs.forEach(custom => {
+                    const newCustom = Quill.import(custom.import);
+                    newCustom.whitelist = custom.whitelist;
+                    Quill.register(newCustom, true);
                 });
             }
         }
 
-        const modules = Object.assign({}, this.modules || this.config.modules);
+        const modules: QuillModules = Object.assign({}, this.modules || this.config.modules);
         const toolbarElem = this.elementRef.nativeElement.querySelector(
             '[quill-editor-toolbar]'
         );
         if (toolbarElem) {
-            modules['toolbar'] = toolbarElem;
+            modules.toolbar = toolbarElem;
         }
 
         let placeholder = 'Insert text here ...';

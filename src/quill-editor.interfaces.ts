@@ -12,16 +12,17 @@ export interface QuillToolbar {
 }
 
 export interface QuillModules {
-    toolbar: ((string | QuillToolbar)[])[] | { container: (string | QuillToolbar)[] };
+    table?: boolean;
+    toolbar?: ((string | QuillToolbar)[])[];
 }
 
-export interface CustomOption {
+export interface QuillCustom {
     import: string;
     whitelist: Array<any>;
 }
 
 export interface QuillConfig {
-    modules?: QuillModules | {};
+    modules?: QuillModules;
+    customs?: QuillCustom[];
     language?: '' | 'chinese';
-    customOptions?: CustomOption[];
 }

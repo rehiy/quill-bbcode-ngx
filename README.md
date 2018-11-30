@@ -106,8 +106,8 @@ class YourModule { ... }
 
 It is possible to set custom default toolbar modules with the import of the `QuillModule`.
 
+- `customs` adding for example custom font sizes --> this overwrites this options **globally** !!!
 - `language` support 'chinese' language
-- `customOptions` adding for example custom font sizes --> this overwrites this options **globally** !!!
 
 ```
 @NgModule({
@@ -118,7 +118,7 @@ It is possible to set custom default toolbar modules with the import of the `Qui
       modules: {
         toolbar: [...]
       },
-      customOptions: [...]
+      customs: [...]
     })
   ],
   ...
