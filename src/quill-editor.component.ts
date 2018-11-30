@@ -53,6 +53,10 @@ export class QuillEditorComponent
     @Input() public sanitize = false;
     @Input() public style: any = {};
 
+    @Input() public maxLength: number;
+    @Input() public minLength: number;
+    @Input() public required: boolean;
+
     @Input() public bounds: HTMLElement | string;
     @Input() public formats: string[];
     @Input() public modules: { [index: string]: Object };
@@ -62,74 +66,10 @@ export class QuillEditorComponent
     @Input() public strict = true;
     @Input() public theme: string;
 
-    @Input() public required: boolean;
-    @Input() public minLength: number;
-    @Input() public maxLength: number;
-
-    @Input()
-    public valueGetter = (quillEditor: any, editorElement: HTMLElement): any => {
-        let html: string | null = editorElement.children[0].innerHTML;
-        if (html === '<p><br></p>' || html === '<div><br><div>') {
-            html = null;
-        }
-
-        if (this.format === 'bbcode') {
-            return bbcode.build(html);
-        }
-
-        if (this.format === 'text') {
-            return quillEditor.getText();
-        }
-
-        if (this.format === 'object') {
-            return quillEditor.getContents();
-        }
-
-        if (this.format === 'json') {
-            try {
-                return JSON.stringify(quillEditor.getContents());
-            } catch (e) { }
-            return quillEditor.getText();
-        }
-
-        return html;
-    }
-
-    @Input()
-    public valueSetter = (quillEditor: any, value: any): any => {
-
-        if (this.format === 'bbcode') {
-            value = bbcode.parse(value);
-            if (this.sanitize) {
-                value = this.domSanitizer.sanitize(SecurityContext.HTML, value);
-            }
-            return quillEditor.clipboard.convert(value);
-        }
-
-        if (this.format === 'html') {
-            if (this.sanitize) {
-                value = this.domSanitizer.sanitize(SecurityContext.HTML, value);
-            }
-            return quillEditor.clipboard.convert(value);
-        }
-
-        if (this.format === 'json') {
-            try {
-                return JSON.parse(value);
-            } catch (e) {
-                return value;
-            }
-        }
-
-        return value;
-    }
-
     @Output()
     public editorCreated: EventEmitter<any> = new EventEmitter();
-
     @Output()
     public contentChanged: EventEmitter<any> = new EventEmitter();
-
     @Output()
     public selectionChanged: EventEmitter<any> = new EventEmitter();
 
@@ -145,6 +85,56 @@ export class QuillEditorComponent
         this.config = this.config || {};
         this.config.modules = this.config.modules || {};
         this.config.language = this.config.language || '';
+    }
+
+    @Input()
+    public valueGetter = (quillEditor: any, editorElement: HTMLElement): any => {
+        switch (this.format) {
+            case 'text':
+                return quillEditor.getText();
+            case 'object':
+                return quillEditor.getContents();
+            case 'json':
+                try {
+                    return JSON.stringify(quillEditor.getContents());
+                } catch (e) {
+                    return quillEditor.getText();
+                }
+        }
+
+        const html: string = editorElement.children[0].innerHTML;
+        if (html === '<p><br></p>' || html === '<div><br><div>') {
+            return '';
+        }
+
+        if (this.format === 'bbcode') {
+            return bbcode.build(html);
+        }
+
+        return html;
+    }
+
+    @Input()
+    public valueSetter = (quillEditor: any, value: any): any => {
+        if (this.format === 'html' || this.format === 'bbcode') {
+            if (this.format === 'bbcode') {
+                value = bbcode.parse(value);
+            }
+            if (this.sanitize) {
+                value = this.domSanitizer.sanitize(SecurityContext.HTML, value);
+            }
+            return quillEditor.clipboard.convert(value);
+        }
+
+        if (this.format === 'json') {
+            try {
+                return JSON.parse(value);
+            } catch (e) {
+                return value;
+            }
+        }
+
+        return value;
     }
 
     public ngAfterViewInit() {
@@ -241,12 +231,8 @@ export class QuillEditorComponent
             (range: any, oldRange: any, source: string) => {
                 this.zone.run(() => {
                     this.selectionChanged.emit({
-                        editor: this.quillEditor,
-                        range: range,
-                        oldRange: oldRange,
-                        source: source
+                        editor: this.quillEditor, range, oldRange, source
                     });
-
                     if (!range) {
                         this.onModelTouched();
                     }
@@ -260,24 +246,14 @@ export class QuillEditorComponent
             (delta: any, oldDelta: any, source: string) => {
                 const text = this.quillEditor.getText();
                 const content = this.quillEditor.getContents();
-
                 let html: string | null = this.editorElem.children[0].innerHTML;
                 if (html === '<p><br></p>' || html === '<div><br><div>') {
                     html = null;
                 }
-
                 this.zone.run(() => {
-                    this.onModelChange(
-                        this.valueGetter(this.quillEditor, this.editorElem)
-                    );
+                    this.onModelChange(this.valueGetter(this.quillEditor, this.editorElem));
                     this.contentChanged.emit({
-                        editor: this.quillEditor,
-                        html: html,
-                        text: text,
-                        content: content,
-                        delta: delta,
-                        oldDelta: oldDelta,
-                        source: source
+                        editor: this.quillEditor, html, text, content, delta, oldDelta, source
                     });
                 });
             }
@@ -312,9 +288,7 @@ export class QuillEditorComponent
                 if (this.format === 'text') {
                     this.quillEditor.setText(currentValue);
                 } else {
-                    this.quillEditor.setContents(
-                        this.valueSetter(this.quillEditor, this.content)
-                    );
+                    this.quillEditor.setContents(this.valueSetter(this.quillEditor, this.content));
                 }
                 return;
             }
@@ -366,7 +340,6 @@ export class QuillEditorComponent
                 given: textLength,
                 minLength: this.minLength
             };
-
             valid = false;
         }
 
@@ -375,7 +348,6 @@ export class QuillEditorComponent
                 given: textLength,
                 maxLength: this.maxLength
             };
-
             valid = false;
         }
 
@@ -383,7 +355,6 @@ export class QuillEditorComponent
             err.requiredError = {
                 empty: true
             };
-
             valid = false;
         }
 
