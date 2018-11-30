@@ -29,14 +29,18 @@ class YourModule { ... }
 - use `<quill-editor></quill-editor>` in your templates to add a default quill editor
 - do not forget to include quill + theme css in your buildprocess, module or index.html!
 
-## Config
+## Model Config
 
-- ngModel - set initial value or allow two-way databinding
-- readOnly (true | false) if user can edit content
-- formats - array of allowed formats/groupings
-- format - model format - default: `html`, values: `html | bbcode | object | text | json`, sets the model value type - html = html string, object = quill operation object, json = quill operation json, text = plain text
-- modules - configure/disable quill modules, e.g toolbar or add custom toolbar via html element default is
+- `ngModel` set initial value or allow two-way databinding
+- `maxLength` add validation for maxlength - set model state to `invalid` and add `ng-invalid` class
+- `minLength` add validation for minlength - set model state to `invalid` and add `ng-invalid` class, only set invalid if editor text not empty --> if you want to check if text is required --> use the required attribute
+- `required` add validation as a required field - `[required]="true"` - default: false, boolean expected (no strings!)
 
+## Quill Config
+
+- `bounds` boundary of the editor, default `document.body`, pass 'self' to attach the editor element
+- `formats` array of allowed formats/groupings
+- `modules` configure/disable quill modules, e.g toolbar or add custom toolbar via html element default is
 ```
 {
   toolbar: [
@@ -62,20 +66,18 @@ class YourModule { ... }
   ]
 };
 ```
+- `placeholder` placeholder text, default is `Insert text here ...`
+- `readOnly` (true | false) if user can edit content
+- `scrollingContainer` default '.ql-editor', allows to set scrolling container
+- `strict` default: true, sets editor in strict mode
+- `theme` bubble/snow, default is `snow`
 
-- theme - bubble/snow, default is `snow`
-- sanitize - uses angulars DomSanitizer to santize html values - default: `true`, boolean (only for format="html")
-- style - set a style object, e.g. `[style]="{height: '250px'}"`
-- placeholder - placeholder text, default is `Insert text here ...`
-- bounds - boundary of the editor, default `document.body`, pass 'self' to attach the editor element
-- maxLength - add validation for maxlength - set model state to `invalid` and add `ng-invalid` class
-- minLength - add validation for minlength - set model state to `invalid` and add `ng-invalid` class, only set invalid if editor text not empty --> if you want to check if text is required --> use the required attribute
-- required - add validation as a required field - `[required]="true"` - default: false, boolean expected (no strings!)
-- strict - default: true, sets editor in strict mode
-- scrollingContainer - default '.ql-editor', allows to set scrolling container
-- use custom-options for adding for example custom font sizes --> this overwrites this options **globally** !!!
+## Other Config
+
+- `format` model format - default: `html`, values: `html | bbcode | object | text | json`, sets the model value type - html = html string, bbcode = discuz bbcode string, object = quill operation object, json = quill operation json, text = plain text
+- `sanitize` uses angulars DomSanitizer to santize html values - default: `true`, boolean (only for format="html")
+- `style` set a style object, e.g. `[style]="{height: '250px'}"`
 - possbility to create a custom toolbar via projection slot `[quill-editor-toolbar]`:
-
 ```
 <quill-editor>
   <div quill-editor-toolbar>
@@ -104,6 +106,9 @@ class YourModule { ... }
 
 It is possible to set custom default toolbar modules with the import of the `QuillModule`.
 
+- `language` support 'chinese' language
+- `customOptions` adding for example custom font sizes --> this overwrites this options **globally** !!!
+
 ```
 @NgModule({
   imports: [
@@ -112,7 +117,8 @@ It is possible to set custom default toolbar modules with the import of the `Qui
     QuillModule.forRoot({
       modules: {
         toolbar: [...]
-      }
+      },
+      customOptions: [...]
     })
   ],
   ...

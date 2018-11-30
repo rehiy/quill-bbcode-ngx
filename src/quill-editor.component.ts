@@ -8,7 +8,7 @@ import {
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator } from '@angular/forms';
 
-import { CustomOption, QuillConfig, QuillModules } from './quill-editor.interfaces';
+import { QuillConfig } from './quill-editor.interfaces';
 
 import * as bbcode from 'discuz-bbcode';
 
@@ -40,7 +40,6 @@ export class QuillEditorComponent
 
     private disabled = false; // used to store initial value before ViewInit
 
-    private defaultModules: QuillModules | {};
     private quillEditor: any;
     private editorElem: HTMLElement;
     private content: any;
@@ -50,15 +49,9 @@ export class QuillEditorComponent
     private onModelChange: Function = () => { };
     private onModelTouched: Function = () => { };
 
-    @Input() public locate: '' | 'chinese' = '';
     @Input() public format: 'object' | 'bbcode' | 'html' | 'text' | 'json' = 'html';
-    @Input() public customOptions: CustomOption[] = [];
     @Input() public sanitize = false;
     @Input() public style: any = {};
-
-    @Input() public required: boolean;
-    @Input() public minLength: number;
-    @Input() public maxLength: number;
 
     @Input() public bounds: HTMLElement | string;
     @Input() public formats: string[];
@@ -68,6 +61,10 @@ export class QuillEditorComponent
     @Input() public scrollingContainer: HTMLElement | string;
     @Input() public strict = true;
     @Input() public theme: string;
+
+    @Input() public required: boolean;
+    @Input() public minLength: number;
+    @Input() public maxLength: number;
 
     @Input()
     public valueGetter = (quillEditor: any, editorElement: HTMLElement): any => {
@@ -139,13 +136,15 @@ export class QuillEditorComponent
     constructor(
         private elementRef: ElementRef,
         private domSanitizer: DomSanitizer,
-        @Inject(DOCUMENT) private doc: any,
-        @Inject(PLATFORM_ID) private platformId: Object,
         private renderer: Renderer2,
         private zone: NgZone,
+        @Inject(DOCUMENT) private doc: any,
+        @Inject(PLATFORM_ID) private platformId: Object,
         @Inject('config') private config: QuillConfig,
     ) {
-        this.defaultModules = this.config && this.config.modules || {};
+        this.config = this.config || {};
+        this.config.modules = this.config.modules || {};
+        this.config.language = this.config.language || '';
     }
 
     public ngAfterViewInit() {
@@ -154,17 +153,26 @@ export class QuillEditorComponent
         }
 
         if (typeof Quill === 'undefined') {
-            switch (this.locate) {
+            switch (this.config.language) {
                 case 'chinese':
                     Quill = require('quill-chinese');
-                    this.defaultModules['toolbar'] = Quill.chineseToolbar;
+                    if (Quill.chineseToolbar) {
+                        this.config.modules['toolbar'] = Quill.chineseToolbar;
+                    }
                     break;
                 default:
                     Quill = require('quill');
             }
+            if (this.config.customOptions) {
+                this.config.customOptions.forEach(customOption => {
+                    const newCustomOption = Quill.import(customOption.import);
+                    newCustomOption.whitelist = customOption.whitelist;
+                    Quill.register(newCustomOption, true);
+                });
+            }
         }
 
-        const modules = this.modules || this.defaultModules;
+        const modules = Object.assign({}, this.modules || this.config.modules);
         const toolbarElem = this.elementRef.nativeElement.querySelector(
             '[quill-editor-toolbar]'
         );
@@ -190,20 +198,14 @@ export class QuillEditorComponent
             });
         }
 
-        this.customOptions.forEach(customOption => {
-            const newCustomOption = Quill.import(customOption.import);
-            newCustomOption.whitelist = customOption.whitelist;
-            Quill.register(newCustomOption, true);
-        });
-
         this.quillEditor = new Quill(this.editorElem, {
             bounds: this.bounds ? (this.bounds === 'self' ? this.editorElem : this.bounds) : this.doc.body,
             formats: this.formats,
             modules: modules,
             placeholder: placeholder,
             readOnly: this.readOnly,
-            strict: this.strict,
             scrollingContainer: this.scrollingContainer,
+            strict: this.strict,
             theme: this.theme || 'snow'
         });
 

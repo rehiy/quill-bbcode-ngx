@@ -1,8 +1,3 @@
-export interface CustomOption {
-    import: string;
-    whitelist: Array<any>;
-}
-
 export interface QuillToolbar {
     indent?: string;
     list?: string;
@@ -20,6 +15,13 @@ export interface QuillModules {
     toolbar: ((string | QuillToolbar)[])[] | { container: (string | QuillToolbar)[] };
 }
 
+export interface CustomOption {
+    import: string;
+    whitelist: Array<any>;
+}
+
 export interface QuillConfig {
-    modules?: QuillModules;
+    modules?: QuillModules | {};
+    language?: '' | 'chinese';
+    customOptions?: CustomOption[];
 }
