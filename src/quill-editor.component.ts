@@ -160,7 +160,7 @@ export class QuillEditorComponent
             }
         }
 
-        const modules: QuillModules = Object.assign({}, this.modules || this.config.modules);
+        const modules: QuillModules = this.modules || this.config.modules;
         const toolbarElem = this.elementRef.nativeElement.querySelector(
             '[quill-editor-toolbar]'
         );
@@ -187,6 +187,7 @@ export class QuillEditorComponent
         }
 
         this.quillEditor = new Quill(this.editorElem, {
+            debug: this.config.debug ? 'info' : 'warn',
             bounds: this.bounds ? (this.bounds === 'self' ? this.editorElem : this.bounds) : this.doc.body,
             formats: this.formats,
             modules: modules,

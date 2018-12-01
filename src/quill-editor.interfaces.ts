@@ -22,6 +22,7 @@ export interface QuillCustom {
 }
 
 export interface QuillConfig {
+    debug?: boolean;
     modules?: QuillModules;
     customs?: QuillCustom[];
     language?: '' | 'chinese';
