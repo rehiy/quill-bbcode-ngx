@@ -1,8 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { QuillEditorComponent } from './quill-editor.component';
-import { QuillConfig } from './quill-editor.interfaces';
-import { defaultConfig } from './quill-editor.vars';
+import { QuillOptions } from './quill-editor.interfaces';
+import { QuillDefault } from './quill-editor.vars';
 
 
 @NgModule({
@@ -12,15 +12,15 @@ import { defaultConfig } from './quill-editor.vars';
     imports: [],
     exports: [QuillEditorComponent],
     providers: [
-        { provide: 'config', useValue: defaultConfig }
+        { provide: 'config', useValue: QuillDefault }
     ]
 })
 export class QuillModule {
-    static forRoot(config?: QuillConfig): ModuleWithProviders {
+    static forRoot(config?: QuillOptions): ModuleWithProviders {
         return {
             ngModule: QuillModule,
             providers: [
-                { provide: 'config', useValue: config || defaultConfig }
+                { provide: 'config', useValue: config || QuillDefault }
             ]
         };
     }

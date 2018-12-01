@@ -21,7 +21,7 @@ export interface QuillCustom {
     whitelist: Array<any>;
 }
 
-export interface QuillConfig {
+export interface QuillOptions {
     debug?: boolean;
     modules?: QuillModules;
     customs?: QuillCustom[];

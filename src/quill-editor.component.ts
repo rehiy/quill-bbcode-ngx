@@ -8,7 +8,7 @@ import {
 
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator } from '@angular/forms';
 
-import { QuillConfig, QuillModules } from './quill-editor.interfaces';
+import { QuillOptions, QuillModules } from './quill-editor.interfaces';
 
 import * as bbcode from 'discuz-bbcode';
 
@@ -64,7 +64,7 @@ export class QuillEditorComponent
     @Input() public readOnly = false;
     @Input() public scrollingContainer: HTMLElement | string;
     @Input() public strict = true;
-    @Input() public theme: string;
+    @Input() public theme: 'snow' | 'bubble';
 
     @Output()
     public editorCreated: EventEmitter<any> = new EventEmitter();
@@ -80,7 +80,7 @@ export class QuillEditorComponent
         private zone: NgZone,
         @Inject(DOCUMENT) private doc: any,
         @Inject(PLATFORM_ID) private platformId: Object,
-        @Inject('config') private config: QuillConfig,
+        @Inject('config') private config: QuillOptions,
     ) {
         this.config = this.config || {};
         this.config.modules = this.config.modules || {};
@@ -143,15 +143,12 @@ export class QuillEditorComponent
         }
 
         if (typeof Quill === 'undefined') {
-            switch (this.config.language) {
-                case 'chinese':
-                    Quill = require('quill-chinese');
-                    this.config.modules.toolbar = Quill.chineseToolbar;
-                    break;
-                default:
-                    Quill = require('quill');
+            if (this.config.language === 'chinese') {
+                Quill = require('quill-chinese');
+            } else {
+                Quill = require('quill');
             }
-            if (this.config.customs) {
+            if (this.config.customs && this.config.customs.length > 0) {
                 this.config.customs.forEach(custom => {
                     const newCustom = Quill.import(custom.import);
                     newCustom.whitelist = custom.whitelist;
@@ -187,8 +184,8 @@ export class QuillEditorComponent
         }
 
         this.quillEditor = new Quill(this.editorElem, {
-            debug: this.config.debug ? 'info' : 'warn',
             bounds: this.bounds ? (this.bounds === 'self' ? this.editorElem : this.bounds) : this.doc.body,
+            debug: this.config.debug,
             formats: this.formats,
             modules: modules,
             placeholder: placeholder,
