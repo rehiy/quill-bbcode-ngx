@@ -36,7 +36,7 @@ let Quill: any;
     encapsulation: ViewEncapsulation.None
 })
 export class QuillEditorComponent
-    implements AfterViewInit, ControlValueAccessor, OnChanges, OnDestroy, Validator {
+    implements AfterViewInit, ControlValueAccessor, Validator, OnChanges, OnDestroy {
 
     private disabled = false; // used to store initial value before ViewInit
 

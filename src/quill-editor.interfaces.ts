@@ -12,8 +12,8 @@ export interface QuillToolbar {
 }
 
 export interface QuillModules {
+    toolbar?: (string | QuillToolbar)[] | ((string | QuillToolbar)[])[];
     table?: boolean;
-    toolbar?: ((string | QuillToolbar)[])[];
 }
 
 export interface QuillCustom {
