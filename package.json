@@ -1,6 +1,6 @@
 {
     "name": "ngx-quill-bbcode",
-    "version": "1.3.2",
+    "version": "1.3.3",
     "author": {
         "name": "Anrip Wong",
         "email": "mail@anrip.com",
@@ -40,9 +40,9 @@
     "module": "./src/quill.module.js",
     "typings": "index.d.ts",
     "dependencies": {
-        "discuz-bbcode": "^0.2.5",
+        "discuz-bbcode": "^0.2.7",
         "quill": "^2.0.0-dev.3",
-        "quill-chinese": "^2.0.0-1"
+        "quill-chinese": "^2.0.0-3"
     },
     "devDependencies": {
         "@angular/common": "^5.0.0 || ^6.0.0 || ^7.0.0",
