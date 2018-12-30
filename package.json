@@ -1,13 +1,13 @@
 {
     "name": "ngx-quill-bbcode",
-    "version": "1.3.3",
+    "version": "2.0.0",
     "author": {
         "name": "Anrip Wong",
         "email": "mail@anrip.com",
         "url": "http://www.anrip.com"
     },
     "homepage": "http://www.anrip.com",
-    "description": "An angular (>= v5) component for the easy use of the QuillJS richt text editor.",
+    "description": "An angular (>= v7) component for the easy use of the QuillJS richt text editor.",
     "license": "Apache-2.0",
     "keywords": [
         "editor",
@@ -17,9 +17,6 @@
         "quill",
         "quilljs",
         "angular",
-        "angular 5",
-        "angular 6",
-        "angular 7",
         "directive",
         "component"
     ],
@@ -32,7 +29,7 @@
     },
     "scripts": {
         "build": "ng-packagr -p ng-package.json",
-        "lint": "tslint --force \"src/**/*.ts\"",
+        "lint": "tslint --force src/**/*.ts",
         "publish": "cd dist && npm publish",
         "start": "npm run lint"
     },
@@ -45,29 +42,27 @@
         "quill-chinese": "^2.0.0-3"
     },
     "devDependencies": {
-        "@angular/common": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/compiler": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/compiler-cli": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/core": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/forms": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/platform-browser": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/platform-browser-dynamic": "^5.0.0 || ^6.0.0 || ^7.0.0",
+        "@angular/common": "^7.0.0",
+        "@angular/compiler": "^7.0.0",
+        "@angular/compiler-cli": "^7.0.0",
+        "@angular/core": "^7.0.0",
+        "@angular/forms": "^7.0.0",
+        "@angular/platform-browser": "^7.0.0",
         "@types/node": "^10.12.0",
         "@types/quill": "^1.3.10",
         "codelyzer": "^4.5.0",
-        "core-js": "^2.5.7",
+        "core-js": "^2.5.0",
         "ng-packagr": "^4.4.0",
-        "rxjs": "^5.5.2 || ^6.1.0 || ^6.3.0",
-        "ts-helpers": "^1.1.2",
-        "ts-loader": "^5.2.2",
-        "tsickle": "^0.33.1",
-        "tslint": "^4.0.0 || ^5.10.0",
-        "typescript": ">=2.4.2 || <2.8 || ^3.1",
+        "rxjs": " ^6.3.0",
+        "tsickle": "^0.33.0",
+        "tslint": "^5.10.0",
+        "typescript": "~3.1.0",
         "zone.js": "^0.8.26"
     },
     "peerDependencies": {
-        "@angular/core": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "@angular/forms": "^5.0.0 || ^6.0.0 || ^7.0.0",
-        "rxjs": "^5.5.2 || ^6.1.0 || ^6.3.0"
+        "@angular/common": "^7.0.0",
+        "@angular/core": "^7.0.0",
+        "@angular/forms": "^7.0.0",
+        "rxjs": "^6.3.0"
     }
 }
