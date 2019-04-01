@@ -3,8 +3,9 @@
     "whitelistedNonPeerDependencies": [
         "discuz-bbcode", "quill", "quill-chinese"
     ],
+    "dest": "public",
     "lib": {
-        "entryFile": "index.ts",
+        "entryFile": "public-api.ts",
         "cssUrl": "inline"
     }
 }

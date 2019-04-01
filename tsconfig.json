@@ -18,8 +18,10 @@
         ]
     },
     "files": [
-        "index.ts",
-        "src/**/*.ts",
+        "public-api.ts"
+    ],
+    "include": [
+        "src/**/*.ts"
     ],
     "exclude": [
         "node_modules",

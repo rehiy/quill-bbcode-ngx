@@ -10,8 +10,8 @@
 
 # parts
 
-dist
 node_modules
+public
 
 # misc
 
