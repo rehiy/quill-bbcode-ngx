@@ -1,4 +1,4 @@
-# ngx-quill-bbcode-bbcode
+# ngx-quill-bbcode
 
 ngx-quill-bbcode is the new angular (>=5) implementation of ngQuill.
 

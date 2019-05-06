@@ -10,6 +10,7 @@
 
 # parts
 
+package-lock.json
 node_modules
 public
 
