@@ -1,6 +1,6 @@
 {
     "name": "ngx-quill-bbcode",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "author": {
         "name": "Anrip Wong",
         "email": "mail@anrip.com",
@@ -28,13 +28,13 @@
         "url": "https://github.com/anrip/quill-bbcode-ngx/issues"
     },
     "scripts": {
-        "build": "ng-packagr -p packagr.json",
-        "lint": "tslint --force src/**/*.ts",
-        "publish": "cd public && npm publish",
+        "build": "ng-packagr -p package.json",
+        "lint": "tslint --project tslint.json",
+        "push": "cd public && npm publish",
         "start": "npm run lint"
     },
-    "main": "./bundles/index.js",
-    "module": "./src/quill.module.js",
+    "main": "bundles/index.js",
+    "module": "module.js",
     "typings": "index.d.ts",
     "dependencies": {
         "discuz-bbcode": "^0.2.7",
@@ -52,11 +52,10 @@
         "@types/quill": "^1.3.10",
         "codelyzer": "^4.5.0",
         "core-js": "^2.5.4",
-        "ng-packagr": "^4.7.1",
+        "ng-packagr": "^5.1.0",
         "rxjs": " ^6.3.0",
-        "tsickle": "^0.34.0",
         "tslint": "^5.12.0",
-        "typescript": "~3.1.1",
+        "typescript": "~3.2.2",
         "zone.js": "^0.8.26"
     },
     "peerDependencies": {
@@ -65,5 +64,17 @@
         "@angular/forms": "^7.0.0",
         "@angular/platform-browser": "^7.0.0",
         "rxjs": "^6.3.0"
+    },
+    "ngPackage": {
+        "whitelistedNonPeerDependencies": [
+            "discuz-bbcode",
+            "quill",
+            "quill-chinese"
+        ],
+        "dest": "public",
+        "lib": {
+            "entryFile": "src/public-api.ts",
+            "cssUrl": "inline"
+        }
     }
 }
