@@ -46,8 +46,8 @@ export class QuillEditorComponent
 
     private selectionChangeEvent: any;
     private textChangeEvent: any;
-    private onModelChange: Function = () => { };
-    private onModelTouched: Function = () => { };
+    private onModelChange: CallableFunction = () => { };
+    private onModelTouched: CallableFunction = () => { };
 
     @Input() public format: 'object' | 'bbcode' | 'html' | 'text' | 'json' = 'html';
     @Input() public sanitize = false;
@@ -79,7 +79,7 @@ export class QuillEditorComponent
         private renderer: Renderer2,
         private zone: NgZone,
         @Inject(DOCUMENT) private doc: any,
-        @Inject(PLATFORM_ID) private platformId: Object,
+        @Inject(PLATFORM_ID) private platformId: any,
         @Inject('config') private config: QuillOptions,
     ) {
         this.config = this.config || {};
@@ -187,8 +187,8 @@ export class QuillEditorComponent
             bounds: this.bounds ? (this.bounds === 'self' ? this.editorElem : this.bounds) : this.doc.body,
             debug: this.config.debug,
             formats: this.formats,
-            modules: modules,
-            placeholder: placeholder,
+            modules,
+            placeholder,
             readOnly: this.readOnly,
             scrollingContainer: this.scrollingContainer,
             strict: this.strict,
@@ -269,11 +269,11 @@ export class QuillEditorComponent
         if (!this.quillEditor) {
             return;
         }
-        if (changes['readOnly']) {
-            this.quillEditor.enable(!changes['readOnly'].currentValue);
+        if (changes.readOnly) {
+            this.quillEditor.enable(!changes.readOnly.currentValue);
         }
-        if (changes['placeholder']) {
-            this.quillEditor.root.dataset.placeholder = changes['placeholder'].currentValue;
+        if (changes.placeholder) {
+            this.quillEditor.root.dataset.placeholder = changes.placeholder.currentValue;
         }
     }
 
@@ -308,11 +308,11 @@ export class QuillEditorComponent
         }
     }
 
-    public registerOnChange(fn: Function): void {
+    public registerOnChange(fn: CallableFunction): void {
         this.onModelChange = fn;
     }
 
-    public registerOnTouched(fn: Function): void {
+    public registerOnTouched(fn: CallableFunction): void {
         this.onModelTouched = fn;
     }
 
@@ -356,4 +356,5 @@ export class QuillEditorComponent
 
         return valid ? null : err;
     }
+
 }

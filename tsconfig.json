@@ -17,9 +17,6 @@
             "dom"
         ]
     },
-    "files": [
-        "public-api.ts"
-    ],
     "include": [
         "src/**/*.ts"
     ],

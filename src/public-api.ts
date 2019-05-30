@@ -1,2 +1,2 @@
-export * from './quill.module';
-export * from './quill-editor.component';
+export * from './module';
+export * from './component/quill-editor.component';

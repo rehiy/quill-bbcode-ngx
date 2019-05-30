@@ -1,8 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { QuillEditorComponent } from './quill-editor.component';
-import { QuillOptions } from './quill-editor.interfaces';
-import { QuillDefault } from './quill-editor.vars';
+import { QuillEditorComponent } from './component/quill-editor.component';
+import { QuillOptions } from './component/quill-editor.interfaces';
+import { QuillDefault } from './component/quill-editor.vars';
 
 
 @NgModule({
