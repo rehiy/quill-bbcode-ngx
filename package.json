@@ -33,9 +33,6 @@
         "push": "cd public && npm publish",
         "start": "npm run lint"
     },
-    "main": "bundles/index.js",
-    "module": "module.js",
-    "typings": "index.d.ts",
     "dependencies": {
         "discuz-bbcode": "^0.2.7",
         "quill": "^2.0.0-dev.3",
@@ -75,5 +72,8 @@
             "entryFile": "src/public-api.ts",
             "cssUrl": "inline"
         }
-    }
+    },
+    "main": "bundles/index.js",
+    "module": "module.js",
+    "typings": "index.d.ts"
 }
