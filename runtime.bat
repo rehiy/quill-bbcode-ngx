@@ -14,10 +14,10 @@ IF EXIST D:\RunTime\node\runtime.bat (
     CALL D:\RunTime\node\runtime set "%~n0"
 )
 
-::加载Python27环境
+::加载Python环境
 
-IF EXIST D:\RunTime\python27\runtime.bat (
-    CALL D:\RunTime\python27\runtime set "%~n0"
+IF EXIST D:\RunTime\python3\runtime.bat (
+    CALL D:\RunTime\python3\runtime set "%~n0"
 )
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
